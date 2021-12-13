@@ -18,6 +18,40 @@ public:
     int Duration() const { return duration; }
 };
 
+std::vector<std::string> LineItemParser(std::string str)
+{
+    std::vector<std::string> tempVector;
+    bool letterDetection = true;
+    std::string current;
+    for(int i = 0; i < str.size(); i++)
+    {
+        if(str[i] == ',')
+        {
+            letterDetection = false;
+            tempVector.push_back(current);
+            current = "";
+            continue;
+        }
+        if(!letterDetection && str[i] == ' ')
+        {
+            continue;
+        }
+        if(!letterDetection && str[i] != ' ')
+        {
+            letterDetection = true;
+        }
+        if(letterDetection)
+        {
+            current += str[i];
+        }
+        if(i == str.size() - 1)
+        {
+            tempVector.push_back(current);
+        }
+    }
+    return tempVector;
+}
+
 int main()
 {
     std::string filename{".\\schedule.txt"};
@@ -32,8 +66,6 @@ int main()
     }
     bool fetchCategoryTitle = true;
     std::string currCat;
-    std::string currTitle;
-    std::string durBeforeParse;
     int currDur;
     while(std::getline(f, str))
     {
@@ -50,34 +82,9 @@ int main()
             //std::cout << "Category: " << currCat << '\n';
             continue;
         }
-        bool switchToDur = false;
-        for(int i = 0; i < str.size(); i++)
-        {
-            if(str[i] == ',')
-            {
-                switchToDur = true;
-                continue;
-            }
-            if(!switchToDur)
-            {
-                currTitle += str[i];
-                //std::cout << "Current Title: " << currTitle << '\n';
-            }
-            if(switchToDur)
-            {
-                if(str[i] == ' ')
-                {
-                    continue;
-                }
-                durBeforeParse += str[i];
-                //std::cout << "Duration before parse: " << durBeforeParse << '\n';
-            }
-        }
-        currDur = stoi(durBeforeParse);
-        ScheduleItem tempItem{currCat, currTitle, currDur};
+        std::vector<std::string> lineItemList = LineItemParser(str);
+        ScheduleItem tempItem{currCat, lineItemList[0], stoi(lineItemList[1])};
         std::cout << "Temporary Item: " << tempItem.Category() << ", " << tempItem.Title() << ", " << tempItem.Duration() << " minutes\n";
-        currTitle = "";
-        durBeforeParse = "";
         list.push_back(tempItem);
     }
 
