@@ -110,7 +110,7 @@ int main()
     while(printingSchedule)
     {
         ScheduleItem current = list[distrib(gen)];
-        std::cout << hourStart << ":" << minuteStart << " " << current.Title() << '\n';
+        std::cout << std::setw(2) << std::setfill('0') << hourStart << ":" <<  minuteStart << " " << current.Title() << '\n';
         minuteStart += current.Duration();
         if(minuteStart >= 60 && (hourStart != hourEnd))
         {
