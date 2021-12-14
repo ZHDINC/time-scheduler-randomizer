@@ -20,14 +20,14 @@ public:
     int Duration() const { return duration; }
 };
 
-std::vector<std::string> LineItemParser(std::string str)
+std::vector<std::string> LineItemParser(std::string str, char separator)
 {
     std::vector<std::string> tempVector;
     bool letterDetection = true;
     std::string current;
     for(int i = 0; i < str.size(); i++)
     {
-        if(str[i] == ',')
+        if(str[i] == separator)
         {
             letterDetection = false;
             tempVector.push_back(current);
@@ -53,6 +53,42 @@ std::vector<std::string> LineItemParser(std::string str)
     }
     return tempVector;
 }
+
+class Clock
+{
+    int hours;
+    int minutes;
+    bool nextDay = false;
+public:
+    Clock(int hours, int minutes) : hours{hours}, minutes{minutes} { }
+    Clock(std::string strToParse)
+    {
+        std::vector<std::string> time = LineItemParser(strToParse, ':');
+        hours = stoi(time[0]);
+        minutes = stoi(time[1]);
+    }
+    ~Clock();
+    void AddMinutes(int minutesToAdd)
+    {
+        minutes += minutesToAdd;
+        if(minutes >= 60)
+        {
+            minutes -= 60;
+            hours++;
+        }
+    }
+    int GetHours() const { return hours; }
+    int GetMinutes() const { return minutes; }
+
+    bool operator==(Clock& rhs)
+    {
+        if((this->GetHours() == rhs.GetHours()) && (this->GetMinutes() == rhs.GetMinutes()))
+        {
+            return true;
+        }
+        return false;
+    }
+};
 
 int main()
 {
@@ -84,7 +120,7 @@ int main()
             //std::cout << "Category: " << currCat << '\n';
             continue;
         }
-        std::vector<std::string> lineItemList = LineItemParser(str);
+        std::vector<std::string> lineItemList = LineItemParser(str, ',');
         ScheduleItem tempItem{currCat, lineItemList[0], stoi(lineItemList[1])};
         // std::cout << "Temporary Item: " << tempItem.Category() << ", " << tempItem.Title() << ", " << tempItem.Duration() << " minutes\n";
         list.push_back(tempItem);
