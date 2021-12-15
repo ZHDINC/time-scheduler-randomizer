@@ -25,3 +25,38 @@ bool Clock::operator==(Clock& rhs)
     }
     return false;
 }
+
+bool Clock::operator!=(Clock& rhs)
+{
+    if((this->GetHours() != rhs.GetHours()) || (this->GetMinutes() != rhs.GetMinutes()))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Clock::operator>(Clock& rhs)
+{
+    if(this->GetHours() > rhs.GetHours())
+    {
+        return true;
+    }
+    if((this->GetHours() == rhs.GetHours()) && (this->GetMinutes() > rhs.GetMinutes()))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Clock::operator<(Clock& rhs)
+{
+    if(this->GetHours() < rhs.GetHours())
+    {
+        return true;
+    }
+    if((this->GetHours() == rhs.GetHours()) && (this->GetMinutes() < rhs.GetMinutes()))
+    {
+        return true;
+    }
+    return false;
+}

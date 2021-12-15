@@ -10,11 +10,13 @@ class Clock
 public:
     Clock(int hours, int minutes) : hours{hours}, minutes{minutes} { }
     Clock(std::string strToParse);
-    ~Clock();
+    ~Clock() { };
     void AddMinutes(int minutesToAdd);
     int GetHours() const { return hours; }
     int GetMinutes() const { return minutes; }
 
     bool operator==(Clock& rhs);
-    
+    bool operator!=(Clock& rhs);
+    bool operator>(Clock& rhs);
+    bool operator<(Clock& rhs);
 };

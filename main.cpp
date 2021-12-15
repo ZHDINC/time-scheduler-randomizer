@@ -55,28 +55,22 @@ int main()
     bool printingSchedule = true;
     std::cout << "Start time: ";
     std::cin >> hourStart >> minuteStart;
+    Clock startClock{hourStart, minuteStart};
     std::cout << "End time: ";
     std::cin >> hourEnd >> minuteEnd;
-    std::cout << "Inputted times: Start: " << hourStart << ":" << minuteStart << " End: " << hourEnd << ":" << minuteEnd << "\n";
+    Clock endClock{hourEnd, minuteEnd};
+    std::cout << "Inputted times: Start: " << startClock.GetHours() << ":" << startClock.GetMinutes() << " End: " << endClock.GetHours() << ":" << endClock.GetMinutes() << "\n";
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distrib(0, list.size() - 1);
     while(printingSchedule)
     {
         ScheduleItem current = list[distrib(gen)];
-        std::cout << std::setw(2) << std::setfill('0') << hourStart << ":" <<  minuteStart << " " << current.Title() << '\n';
-        minuteStart += current.Duration();
-        if(minuteStart >= 60 && (hourStart != hourEnd))
+        std::cout << std::setw(2) << std::setfill('0') << startClock.GetHours() << ":" << std::setw(2) << std::setfill('0') << startClock.GetMinutes() << " " << current.Title() << '\n';
+        startClock.AddMinutes(current.Duration());
+        if(startClock > endClock)
         {
-            minuteStart -= 60;
-            hourStart++;
-        }
-        if(hourStart == hourEnd)
-        {
-            if(minuteStart >= minuteEnd)
-            {
-                printingSchedule = false;
-            }
+            printingSchedule = false;
         }
     }
 }
