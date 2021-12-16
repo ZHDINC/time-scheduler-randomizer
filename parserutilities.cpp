@@ -2,7 +2,7 @@
 
 namespace ParserUtilities
 {
-    std::vector<std::string> LineItemParser(std::string str, char separator)
+    std::vector<std::string> LineItemParser(std::string str, char separator, bool spaceIsSeparator)
     {
         std::vector<std::string> tempVector;
         bool letterDetection = true;
@@ -16,13 +16,33 @@ namespace ParserUtilities
                 current = "";
                 continue;
             }
-            if(!letterDetection && str[i] == ' ')
+            if(spaceIsSeparator)
             {
-                continue;
+                if(str[i] == ' ')
+                {
+                    letterDetection = false;
+                    tempVector.push_back(current);
+                    current = "";
+                    continue;
+                }
             }
-            if(!letterDetection && str[i] != ' ')
+            if(!spaceIsSeparator)
             {
-                letterDetection = true;
+                if(!letterDetection && str[i] == ' ')
+                {
+                    continue;
+                }
+                if(!letterDetection && str[i] != ' ')
+                {
+                    letterDetection = true;
+                }
+            }
+            if(spaceIsSeparator)
+            {
+                if(!letterDetection && str[i] != ' ')
+                {
+                    letterDetection = true;
+                }
             }
             if(letterDetection)
             {
@@ -33,6 +53,10 @@ namespace ParserUtilities
                 tempVector.push_back(current);
             }
         }
+        // for(std::string s : tempVector)
+        // {
+        //     std::cout << s << '\n';
+        // }
         return tempVector;
     }
 }

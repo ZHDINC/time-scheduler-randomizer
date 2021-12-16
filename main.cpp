@@ -38,7 +38,7 @@ int main()
             //std::cout << "Category: " << currCat << '\n';
             continue;
         }
-        std::vector<std::string> lineItemList = ParserUtilities::LineItemParser(str, ',');
+        std::vector<std::string> lineItemList = ParserUtilities::LineItemParser(str, ',', false);
         ScheduleItem tempItem{currCat, lineItemList[0], stoi(lineItemList[1])};
         // std::cout << "Temporary Item: " << tempItem.Category() << ", " << tempItem.Title() << ", " << tempItem.Duration() << " minutes\n";
         list.push_back(tempItem);
@@ -51,14 +51,19 @@ int main()
 
     int hourStart, minuteStart;
     std::string startTimeFull;
+    std::string endTimeFull;
     int hourEnd, minuteEnd;
     bool printingSchedule = true;
     std::cout << "Start time: ";
-    std::cin >> hourStart >> minuteStart;
-    Clock startClock{hourStart, minuteStart};
+    // std::cin >> hourStart >> minuteStart;
+    std::getline(std::cin, startTimeFull);
+    // Clock startClock{hourStart, minuteStart, false};
+    Clock startClock{startTimeFull};
     std::cout << "End time: ";
-    std::cin >> hourEnd >> minuteEnd;
-    Clock endClock{hourEnd, minuteEnd};
+    std::getline(std::cin, endTimeFull);
+    //std::cin >> hourEnd >> minuteEnd;
+    // Clock endClock{hourEnd, minuteEnd, true};
+    Clock endClock{endTimeFull};
     std::cout << "Inputted times: Start: " << startClock.GetHours() << ":" << startClock.GetMinutes() << " End: " << endClock.GetHours() << ":" << endClock.GetMinutes() << "\n";
     std::random_device rd;
     std::mt19937 gen(rd());
